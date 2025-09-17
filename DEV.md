@@ -10,10 +10,18 @@ source venv/bin/activate
 venv\Scripts\activate.bat   
 
 pip install fastapi uvicorn sqlalchemy pydantic[email] alembic
-pip install python-jose[cryptography] bcrypt passlib[bcrypt] python-multipart
+pip install python-jose[cryptography] python-multipart
 pip install "pydantic-settings>=2.0.0"
+# pip install --upgrade bcrypt passlib bcrypt passlib[bcrypt] 
+pip install bcrypt==3.2.0 passlib
+# pip uninstall bcrypt passlib
 
 pip freeze > requirements.txt
+
+pip install pytest httpx
+
+pytest -v
+
 ```
 
 
@@ -33,5 +41,9 @@ uvicorn main:app --reload
 http://localhost:8000/docs
 
 http://localhost:8000/redoc
+
+
+curl -X POST http://127.0.0.1:8000/users -H "Content-Type: application/json" -d '{"email": "test100@gm.com", "username": "test100", "password": "test123123"}'
+
 
 ```

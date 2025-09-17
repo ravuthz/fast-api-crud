@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import TypeVar, Generic, Optional, List, Type, Any
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -37,6 +37,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             db.commit()
             db.refresh(db_obj)
             self._post_create(db, db_obj, obj_in)
+            # return {c.name: getattr(db_obj, c.name) for c in db_obj.__table__.columns}
             return db_obj
         except IntegrityError as e:
             db.rollback()

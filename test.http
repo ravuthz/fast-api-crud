@@ -1,0 +1,45 @@
+### Login
+POST http://localhost:8000/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+> {% client.global.set("auth_token", response.body.access_token); %}
+
+### Create User
+POST http://localhost:8000/users
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "email": "test_user1001@gm.com",
+  "username": "test_user1001",
+  "password": "password123"
+}
+
+> {% client.global.set("created_id", response.body.id); %}
+
+### Update User
+PUT http://localhost:8000/users/{{created_id}}
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "username": "updated_user1001"
+}
+
+### Delete User
+DELETE http://localhost:8000/users/{{created_id}}
+Authorization: Bearer {{auth_token}}
+
+### Show User
+GET http://localhost:8000/users/{{created_id}}
+Authorization: Bearer {{auth_token}}
+
+
+### List User
+GET http://localhost:8000/users
+Authorization: Bearer {{auth_token}}

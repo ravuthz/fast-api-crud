@@ -9,16 +9,16 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
     
     def __init__(self):
         super().__init__(User)
-    
-    def get_by_username(self, db: Session, username: str) -> User:
-        """Get user by username"""
-        return self.get_by_field(db, "username", username)
-    
+
     def get_by_email(self, db: Session, email: str) -> User:
         """Get user by email"""
         return self.get_by_field(db, "email", email)
-    
-    def authenticate(self, db: Session, username: str, password: str) -> User:
+
+    def get_by_username(self, db: Session, username: str) -> User:
+        """Get user by username"""
+        return self.get_by_field(db, "username", username)
+
+    def authenticate(self, db: Session, username: str, password: str) -> User | None:
         """Authenticate user with username and password"""
         user = self.get_by_username(db, username)
         if not user or not auth_service.verify_password(password, user.hashed_password):

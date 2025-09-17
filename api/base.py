@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List, Type
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Body
 from sqlalchemy.orm import Session
 from api.dependencies import get_db, require_permissions
 from services.base import BaseService
@@ -38,10 +38,12 @@ class BaseCRUDRouter(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType,
         
         @self.router.post("/", response_model=self.response_schema)
         async def create_item(
-            item: CreateSchemaType,
+            item = Body(),
             db: Session = Depends(get_db),
             current_user = Depends(require_permissions([f"{resource}:create"]))
         ):
+            print("create user: ")
+            print(item)
             return self.service.create(db, item)
         
         @self.router.get("/", response_model=List[self.response_schema])
