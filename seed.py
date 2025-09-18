@@ -34,18 +34,25 @@ def make_crud(resource):
     ]
 
 
-def seed_data():
+def seed_data(refresh: bool = False):
     # create tables
     Base.metadata.create_all(bind=engine)
 
     session = Session(bind=engine)
 
     try:
+        if refresh:
+            print("⚠️  Refresh mode enabled: truncating all tables...")
+            # Drop all rows in all tables
+            for table in reversed(Base.metadata.sorted_tables):
+                session.execute(table.delete())
+            session.commit()
+
         # ---- Permissions ----
         permissions_data = [
-            *make_crud("user"),
-            *make_crud("role"),
-            *make_crud("permission"),
+            *make_crud("users"),
+            *make_crud("roles"),
+            *make_crud("permissions"),
         ]
 
         permissions = []
@@ -103,4 +110,7 @@ def seed_data():
 
 
 if __name__ == "__main__":
-    seed_data()
+    import sys
+
+    refresh_flag = "--refresh" in sys.argv
+    seed_data(refresh=refresh_flag)

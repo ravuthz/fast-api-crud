@@ -7,14 +7,15 @@ python -m venv venv
 # macOS/Linux
 source venv/bin/activate
 # window
-venv\Scripts\activate.bat   
+venv\Scripts\activate.bat
 
 pip install fastapi uvicorn sqlalchemy pydantic[email] alembic
 pip install python-jose[cryptography] python-multipart
 pip install "pydantic-settings>=2.0.0"
-# pip install --upgrade bcrypt passlib bcrypt passlib[bcrypt] 
+# pip install --upgrade bcrypt passlib bcrypt passlib[bcrypt]
 pip install bcrypt==3.2.0 passlib
 # pip uninstall bcrypt passlib
+pip install psycopg2
 
 pip freeze > requirements.txt
 
@@ -24,7 +25,6 @@ pytest -v
 
 ```
 
-
 ## Deploy development server
 
 ```bash
@@ -33,6 +33,8 @@ pip install -r requirements.txt
 
 # Create initial data (first time only)
 python setup_initial_data.py
+
+python seed.py --refresh
 
 # Start the server
 uvicorn main:app --reload
